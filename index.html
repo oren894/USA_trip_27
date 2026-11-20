@@ -328,7 +328,7 @@ const chipsMap=()=>{const gs=[['all','All'],...S.days.filter(x=>x.stops.some(has
 const initMap=()=>{
  if(typeof L==='undefined'){$('.mapbox').innerHTML='<p class="empty" style="padding:20px">The map could not load. Check your internet connection and open this tab again.</p>';return}
  if(M){M.map.invalidateSize();M.fit(sel);return}
- const map=L.map('map',{zoomControl:true,tap:true}).setView([37,-100],4);
+ const map=L.map('map',{zoomControl:true,zoomSnap:.25}).setView([37,-100],4);
  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd',attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
  const layer=L.layerGroup().addTo(map);let mk=[];
  const draw=()=>{layer.clearLayers();mk=[];
@@ -341,7 +341,7 @@ const initMap=()=>{
   return vis};
  const fit=(g)=>{sel=g;chipsMap();closeCard();const vis=draw();if(!vis.length)return;
   if(vis.length===1)map.setView([vis[0].p.lat,vis[0].p.lng],14);
-  else map.fitBounds(L.latLngBounds(vis.map(d=>[d.p.lat,d.p.lng])),{paddingTopLeft:[40,50],paddingBottomRight:[130,50],maxZoom:15})};
+  else map.fitBounds(L.latLngBounds(vis.map(d=>[d.p.lat,d.p.lng])),{paddingTopLeft:[30,40],paddingBottomRight:[110,40],maxZoom:15})};
  M={map,fit,update:()=>{chipsMap();draw()}};
  setTimeout(()=>{map.invalidateSize();fit(sel)},50);
 };
