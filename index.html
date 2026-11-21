@@ -329,7 +329,8 @@ const initMap=()=>{
  if(typeof L==='undefined'){$('.mapbox').innerHTML='<p class="empty" style="padding:20px">The map could not load. Check your internet connection and open this tab again.</p>';return}
  if(M){M.map.invalidateSize();M.fit(sel);return}
  const map=L.map('map',{zoomControl:true,zoomSnap:.25}).setView([37,-100],4);
- L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd',attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
+ const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+ let bad=0,swapped=false;osm.on('tileerror',()=>{if(++bad>4&&!swapped){swapped=true;map.removeLayer(osm);L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles &copy; Esri'}).addTo(map)}});
  const layer=L.layerGroup().addTo(map);let mk=[];
  const draw=()=>{layer.clearLayers();mk=[];
   const vis=mpts().filter(d=>sel==='all'?d.g!=='opt':d.g===sel);
